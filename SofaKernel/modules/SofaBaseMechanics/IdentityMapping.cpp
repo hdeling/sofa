@@ -53,6 +53,7 @@ int IdentityMappingClass = core::RegisterObject("Special case of mapping where t
         .add< IdentityMapping< Rigid2dTypes, Rigid2dTypes > >()
         .add< IdentityMapping< Vec3dTypes, ExtVec3fTypes > >()
         .add< IdentityMapping< Vec6dTypes, ExtVec3fTypes > >()
+        .add< IdentityMapping< Vec2dTypes, ExtVec3fTypes > >()
 #endif
 #ifndef SOFA_DOUBLE
         .add< IdentityMapping< Vec3fTypes, Vec3fTypes > >()
@@ -62,6 +63,7 @@ int IdentityMappingClass = core::RegisterObject("Special case of mapping where t
         .add< IdentityMapping< Rigid3fTypes, Rigid3fTypes > >()
         .add< IdentityMapping< Rigid2fTypes, Rigid2fTypes > >()
         .add< IdentityMapping< Vec3fTypes, ExtVec3fTypes > >()
+        .add< IdentityMapping< Vec2fTypes, ExtVec3fTypes > >()
 #endif
 #ifndef SOFA_FLOAT
 #ifndef SOFA_DOUBLE
@@ -79,6 +81,7 @@ int IdentityMappingClass = core::RegisterObject("Special case of mapping where t
         .add< IdentityMapping< Rigid2fTypes, Rigid2dTypes > >()
 #endif
 #endif
+
 
 // Rigid -> Vec
 #ifndef SOFA_FLOAT
@@ -107,6 +110,7 @@ template class SOFA_BASE_MECHANICS_API IdentityMapping< Rigid2dTypes, Rigid2dTyp
 template class SOFA_BASE_MECHANICS_API IdentityMapping< Rigid3dTypes, Vec3dTypes >;
 template class SOFA_BASE_MECHANICS_API IdentityMapping< Rigid3dTypes, ExtVec3fTypes >;
 template class SOFA_BASE_MECHANICS_API IdentityMapping< Rigid2dTypes, Vec2dTypes >;
+template class SOFA_BASE_MECHANICS_API IdentityMapping< Vec2dTypes, ExtVec3fTypes >;
 #endif
 #ifndef SOFA_DOUBLE
 template class SOFA_BASE_MECHANICS_API IdentityMapping< Vec3fTypes, Vec3fTypes >;
@@ -121,6 +125,7 @@ template class SOFA_BASE_MECHANICS_API IdentityMapping< Rigid2fTypes, Rigid2fTyp
 template class SOFA_BASE_MECHANICS_API IdentityMapping< Rigid3fTypes, Vec3fTypes >;
 template class SOFA_BASE_MECHANICS_API IdentityMapping< Rigid3fTypes, ExtVec3fTypes >;
 template class SOFA_BASE_MECHANICS_API IdentityMapping< Rigid2fTypes, Vec2fTypes >;
+template class SOFA_BASE_MECHANICS_API IdentityMapping< Vec2fTypes, ExtVec3fTypes >;
 #endif
 
 #ifndef SOFA_FLOAT

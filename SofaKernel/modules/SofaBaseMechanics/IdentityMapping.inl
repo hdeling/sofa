@@ -48,23 +48,27 @@ void IdentityMapping<TIn, TOut>::init()
 
 
     // build J
+    // HD use setFromTriplets as previous method led to assert failure when NIn is different from Nout
     {
         static const unsigned N = std::min<unsigned>(NIn, NOut);
 
         J.compressedMatrix.resize( n*NOut, n*NIn );
         J.compressedMatrix.reserve( n*N );
 
+        typedef Eigen::Triplet<OutReal> Triple;
+        std::vector<Triple> tripletList;
+        tripletList.reserve(n*N);
+
         for( size_t i=0 ; i<n ; ++i )
         {
             for(unsigned r = 0; r < N; ++r)
             {
                 const unsigned row = NOut * i + r;
-                J.compressedMatrix.startVec( row );
                 const unsigned col = NIn * i + r;
-                J.compressedMatrix.insertBack( row, col ) = (OutReal)1;
+                tripletList.push_back(Triple(row, col,(OutReal)1));
             }
         }
-        J.compressedMatrix.finalize();
+        J.compressedMatrix.setFromTriplets(tripletList.begin(), tripletList.end());
     }
 
 }
