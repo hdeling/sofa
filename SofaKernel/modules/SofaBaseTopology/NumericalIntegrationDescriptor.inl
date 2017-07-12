@@ -42,10 +42,13 @@ typename NumericalIntegrationDescriptor<Real,N>::QuadraturePointArray NumericalI
 	if (it!=quadratureMap.end())
 		return ((*it).second);
 	else {
+        typename std::map<QuadratureMethod, QuadratureMethodFunction>::const_iterator itf = quadratureFunctionMap.find(qt);
 		QuadraturePointArray qpa;
+        if (itf != quadratureFunctionMap.end()) {
+            qpa = (*(*itf).second)(order);
+        }
 		return(qpa);
 	}
-
 }
 template< typename Real, int N>
 std::set<typename NumericalIntegrationDescriptor<Real,N>::QuadratureMethod>  NumericalIntegrationDescriptor<Real,N>::getQuadratureMethods() const
@@ -70,9 +73,12 @@ std::set<typename NumericalIntegrationDescriptor<Real,N>::IntegrationOrder>  Num
 	return(ioset);
 }
 template< typename Real, int N>
-void NumericalIntegrationDescriptor<Real,N>::addQuadratureMethod(const QuadratureMethod qt, const IntegrationOrder order, QuadraturePointArray qpa)
+void NumericalIntegrationDescriptor<Real,N>::addQuadratureMethod(const QuadratureMethod qt, const IntegrationOrder order, QuadraturePointArray qpa, const QuadratureMethodFunction fn)
 {
 	quadratureMap.insert(std::pair<QuadratureMethodKey,QuadraturePointArray>(QuadratureMethodKey(qt,order),qpa));
+    if (fn) {
+        quadratureFunctionMap.insert(std::make_pair(qt, fn));
+    }
 }
 
 } // namespace topology
