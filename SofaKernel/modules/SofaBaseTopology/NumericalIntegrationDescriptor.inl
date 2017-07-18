@@ -73,9 +73,14 @@ std::set<typename NumericalIntegrationDescriptor<Real,N>::IntegrationOrder>  Num
 	return(ioset);
 }
 template< typename Real, int N>
-void NumericalIntegrationDescriptor<Real,N>::addQuadratureMethod(const QuadratureMethod qt, const IntegrationOrder order, QuadraturePointArray qpa, const QuadratureMethodFunction fn)
+void NumericalIntegrationDescriptor<Real, N>::addQuadratureMethod(const QuadratureMethod qt, const IntegrationOrder order, QuadraturePointArray qpa)
 {
-	quadratureMap.insert(std::pair<QuadratureMethodKey,QuadraturePointArray>(QuadratureMethodKey(qt,order),qpa));
+    quadratureMap.insert(std::pair<QuadratureMethodKey, QuadraturePointArray>(QuadratureMethodKey(qt, order), qpa));
+ 
+}
+template< typename Real, int N>
+void NumericalIntegrationDescriptor<Real,N>::addQuadratureMethodFunction(const QuadratureMethod qt, const QuadratureMethodFunction fn)
+{
     if (fn) {
         quadratureFunctionMap.insert(std::make_pair(qt, fn));
     }

@@ -37,6 +37,7 @@ namespace component
 namespace topology
 {
 
+
 /// Generic Container for Numerical Integration templated on the type of real and the size of barycentric coordinates for integration points
 template< typename Real, int N>
 class NumericalIntegrationDescriptor {
@@ -65,7 +66,8 @@ public:
 	/// returns the quadrature integration orders available for a given method
     std::set<IntegrationOrder> getIntegrationOrders(const QuadratureMethod qt) const;
 	/// add a quadrature method in the map
-	void addQuadratureMethod(const QuadratureMethod qt, const IntegrationOrder order, QuadraturePointArray qpa, const QuadratureMethodFunction fn=NULL);
+	void addQuadratureMethod(const QuadratureMethod qt, const IntegrationOrder order, QuadraturePointArray qpa);
+    void addQuadratureMethodFunction(const QuadratureMethod qt, const QuadratureMethodFunction fn);
 };
 
 #if defined(SOFA_EXTERN_TEMPLATE) && !defined(SOFA_COMPONENT_TOPOLOGY_NUMERICALINTEGRATIONDESCRIPTOR_CPP)
