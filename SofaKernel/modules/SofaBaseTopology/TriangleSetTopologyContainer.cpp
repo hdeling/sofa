@@ -333,70 +333,26 @@ void TriangleSetTopologyContainer::createElementsOnBorder()
         m_pointsOnBorder.clear();
 
     const unsigned int nbrEdges = getNumberOfEdges();
-    bool newTriangle = true;
-    bool newEdge = true;
-    bool newPoint = true;
+    std::set<PointID> pointSet;
+    std::set<EdgeID> edgeSet;
+    std::set<TriangleID> triangleSet;
 
     helper::ReadAccessor< Data< sofa::helper::vector<Edge> > > m_edge = d_edge;
     for (unsigned int i = 0; i < nbrEdges; i++)
     {
         if (m_trianglesAroundEdge[i].size() == 1) // I.e this edge is on a border
         {
-
-            // --- Triangle case ---
-            for (unsigned int j = 0; j < m_trianglesOnBorder.size(); j++) // Loop to avoid duplicated indices
-            {
-                if (m_trianglesOnBorder[j] == m_trianglesAroundEdge[i][0])
-                {
-                    newTriangle = false;
-                    break;
-                }
-            }
-
-            if(newTriangle) // If index doesn't already exist, add it to the list of triangles On border.
-            {
-                m_trianglesOnBorder.push_back (m_trianglesAroundEdge[i][0]);
-            }
-
-
-            // --- Edge case ---
-            for (unsigned int j = 0; j < m_edgesOnBorder.size(); j++) // Loop to avoid duplicated indices
-            {
-                if (m_edgesOnBorder[j] == i)
-                {
-                    newEdge = false;
-                    break;
-                }
-            }
-
-            if(newEdge) // If index doesn't already exist, add it to the list of edges On border.
-            {
-                m_edgesOnBorder.push_back (i);
-            }
-
-
-            // --- Point case ---
-            PointID firstVertex = m_edge[i][0];
-            for (unsigned int j = 0; j < m_pointsOnBorder.size(); j++) // Loop to avoid duplicated indices
-            {
-                if (m_pointsOnBorder[j] == firstVertex)
-                {
-                    newPoint = false;
-                    break;
-                }
-            }
-
-            if(newPoint) // If index doesn't already exist, add it to the list of points On border.
-            {
-                m_pointsOnBorder.push_back (firstVertex);
-            }
-
-
-            newTriangle = true; //reinitialize tests variables
-            newEdge = true;
-            newPoint = true;
+            edgeSet.insert(i); // insert edge
+            triangleSet.insert(m_trianglesAroundEdge[i][0]); // insert triangle
+            pointSet.insert(m_edge[i][0]); //insert point 0
+            pointSet.insert(m_edge[i][1]); //insert point 1
         }
     }
+    // now copy sets into arrays.
+    m_pointsOnBorder.assign(pointSet.begin(), pointSet.end());
+    m_edgesOnBorder.assign(edgeSet.begin(), edgeSet.end());
+    m_trianglesOnBorder.assign(triangleSet.begin(), triangleSet.end());
+
 }
 
 

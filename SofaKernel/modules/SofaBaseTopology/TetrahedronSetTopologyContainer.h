@@ -285,6 +285,22 @@ public:
 
     bool hasTetrahedraAroundTriangle() const;
 
+    /** \brief: Create element lists which are on topology border:
+    *
+    * - A vector of TetrahedronID @see m_tetrahedraOnBorder. ( I.e which have at least one triangle not adjacent
+    to another Tetrahedron)
+    * - A vector of TriangleID @see m_trianglesOnBorder. ( I.e which have at least: one edge not adjacent
+    to an other Triangle)
+    * - A vector of EdgeID @see m_edgesOnBorder. (I.e which are adjacent to only one Triangle)
+    * - A vector of PointID @see m_pointsOnBorder. (I.e which are part of only one Triangle)
+    */
+    virtual void createElementsOnBorder();
+
+    /** \brief: Return a list of TetrahedronID of tetrahedra which are on a border.
+    * @see createElementsOnBorder()
+    */
+    const sofa::helper::vector <TetrahedronID>& getTetrahedraOnBorder();
+
     /// @}
 
 
@@ -484,6 +500,8 @@ protected:
     /// for each triangle provides the set of tetrahedra adjacent to that triangle.
     sofa::helper::vector< TetrahedraAroundTriangle > m_tetrahedraAroundTriangle;
 
+    /// Set of tetrahedra indices on topology border.
+    sofa::helper::vector <TetrahedronID> m_tetrahedraOnBorder;
 
     /// Boolean used to know if the topology Data of this container is dirty
     bool m_tetrahedronTopologyDirty;

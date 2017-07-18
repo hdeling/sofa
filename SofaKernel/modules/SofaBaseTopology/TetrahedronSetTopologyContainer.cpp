@@ -805,6 +805,74 @@ unsigned int TetrahedronSetTopologyContainer::getNumberOfConnectedComponent()
 }
 
 
+void TetrahedronSetTopologyContainer::createElementsOnBorder()
+{
+
+    if (!hasTetrahedraAroundTriangle())	// Use the trianglesAroundEdgeArray. Should check if it is consistent
+    {
+#ifndef NDEBUG
+        std::cout << "Warning. [TetrahedronSetTopologyContainer::createElementsOnBorder] tetrahedron triangle shell array is empty." << std::endl;
+#endif
+
+        createTetrahedraAroundTriangleArray();
+}
+    if (m_edgesInTriangle.size() == 0)
+        clearEdgesInTriangle();
+
+    if (!m_tetrahedraOnBorder.empty())
+        m_tetrahedraOnBorder.clear();
+
+    if (!m_trianglesOnBorder.empty())
+        m_trianglesOnBorder.clear();
+
+    if (!m_edgesOnBorder.empty())
+        m_edgesOnBorder.clear();
+
+    if (!m_pointsOnBorder.empty())
+        m_pointsOnBorder.clear();
+
+    const unsigned int nbrTriangles = getNumberOfTriangles();
+    std::set<PointID> pointSet;
+    std::set<EdgeID> edgeSet;
+    std::set<TriangleID> triangleSet;
+    std::set<TetrahedronID> tetrahedronSet;
+
+    helper::ReadAccessor< Data< sofa::helper::vector<Triangle> > > m_triangle = d_triangle;
+    for (unsigned int i = 0; i < nbrTriangles; i++)
+    {
+        if (m_tetrahedraAroundTriangle[i].size() == 1) // I.e this triangle is on a border
+        {
+            triangleSet.insert(i); // insert edge
+            tetrahedronSet.insert(m_tetrahedraAroundTriangle[i][0]); // insert tetra
+            pointSet.insert(m_triangle[i][0]); //insert point 0
+            pointSet.insert(m_triangle[i][1]); //insert point 1
+            pointSet.insert(m_triangle[i][2]); //insert point 2
+            edgeSet.insert(m_edgesInTriangle[i][0]);
+            edgeSet.insert(m_edgesInTriangle[i][1]);
+            edgeSet.insert(m_edgesInTriangle[i][2]);
+        }
+    }
+    // now copy sets into arrays.
+    m_pointsOnBorder.assign(pointSet.begin(), pointSet.end());
+    m_edgesOnBorder.assign(edgeSet.begin(), edgeSet.end());
+    m_trianglesOnBorder.assign(triangleSet.begin(), triangleSet.end());
+    m_tetrahedraOnBorder.assign(tetrahedronSet.begin(), tetrahedronSet.end());
+
+}
+
+const sofa::helper::vector <TetrahedronSetTopologyContainer::TetrahedronID>& TetrahedronSetTopologyContainer::getTetrahedraOnBorder()
+{
+    if (!hasBorderElementLists()) // this method should only be called when border lists exists
+    {
+#ifndef NDEBUG
+        sout << "Warning. [ManifoldTriangleSetTopologyContainer::getTrianglesOnBorder] A border element list is empty." << sendl;
+#endif
+        createElementsOnBorder();
+    }
+
+    return m_tetrahedraOnBorder;
+}
+
 const TetrahedronSetTopologyContainer::VecTetraID TetrahedronSetTopologyContainer::getConnectedElement(TetraID elem)
 {
     if(!hasTetrahedraAroundVertex())	// this method should only be called when the shell array exists

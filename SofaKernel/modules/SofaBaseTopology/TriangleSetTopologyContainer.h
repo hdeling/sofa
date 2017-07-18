@@ -252,7 +252,7 @@ public:
      * - A vector of EdgeID @see m_edgesOnBorder. (I.e which are adjacent to only one Triangle)
      * - A vector of PointID @see m_pointsOnBorder. (I.e which are part of only one Triangle)
      */
-    void createElementsOnBorder();
+    virtual void createElementsOnBorder();
 
     /// @}
 
